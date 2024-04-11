@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en" class="has-background-light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grilla con jQuery</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+    <style>
+        .container {
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <section class="section">
+        <input type="button" onclick="location.href='./integrantes.html'" value="Volver a Integrantes" class="button is-info">
+        <input type="button" onclick="location.href='./index.html'" value="Volver al Menú" class="button is-info">
+    </section>
+    <div class="container">
+        <input type="text" id="searchInput" placeholder="Buscar...">
+        <br>
+        <table id="dataTable" class="table is-bordered is-fullwidth">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Username</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>Website</th>
+                    <th>Company</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            // Realizar la solicitud AJAX para obtener los datos del JSON
+            $.ajax({
+                url: 'https://jsonplaceholder.typicode.com/users',
+                dataType: 'json',
+                success: function(data) {
+                    // Recorrer los datos y mostrarlos en la grilla
+                    $.each(data, function(index, item) {
+                        $('#dataTable tbody').append('<tr>' +
+                            '<td>' + item.id + '</td>' +
+                            '<td>' + item.name + '</td>' +
+                            '<td>' + item.username + '</td>' +
+                            '<td>' + item.email + '</td>' +
+                            '<td>' + item.phone + '</td>' +
+                            '<td>' + item.website + '</td>' +
+                            '<td>' + item.company.name + '</td>' +
+                            '</tr>');
+                    });
+                }
+            });
+
+            // Agregar funcionalidad de filtrado
+            $('#searchInput').on('keyup', function() {
+                var value = $(this).val().toLowerCase();
+                $('#dataTable tbody tr').filter(function() {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                });
+            });
+        });
+    </script>
+</body>
+</html>
